@@ -46,7 +46,33 @@ function line (p0_, p1_) {
         [ p0[1], p1[1] ]
     ];
     
+    if (Math.round(p0[0] - p1[0]) === 0) {
+        // vertical
+        var x = p0[0];
+        
+        at(p0[0], p0[1], 'v');
+        for (var y = p0[1] + 1; y < p1[1]; y++) at(x, y, '|');
+        at(p1[0], p1[1], 'V');
+        
+        return;
+    }
+    
+    if (Math.round(p0[1] - p1[1]) === 0) {
+        // horizontal
+        var y = p0[1];
+        
+        at(p0[0], p0[1], 'h');
+        for (
+            var x = bounds[0][0] + 1;
+            x < bounds[0][1];
+            x++
+        ) at(x, y, '—');
+        at(p1[0], p1[1], 'H');
+        return;
+    }
+    
     var m = (p0[1] - p1[1]) / (p0[0] - p1[0]);
+    
     var b = p0[1] - m * p0[0]; // b = y - mx
     
     for (var y = Math.floor(p0[1]); y < p1[1]; y++) {
