@@ -13,9 +13,9 @@ var at = (function () {
             charm.position(Math.floor(x), Math.floor(y));
             charm.write(c);
             
-            process.nextTick(function () {
+            setTimeout(function () {
                 if (queue.length) queue.shift()();
-            });
+            }, 1);
         }
         if (queue.length) queue.push(write)
         else write()
@@ -41,6 +41,11 @@ function line (p0_, p1_) {
     var p0 = t0[1] < t1[1] ? t0 : t1;
     var p1 = t0[1] >= t1[1] ? t0 : t1;
     
+    var bounds = [
+        [ Math.min(p0[0], p1[0]), Math.max(p0[0], p1[0]) ],
+        [ p0[1], p1[1] ]
+    ];
+    
     var m = (p0[1] - p1[1]) / (p0[0] - p1[0]);
     var b = p0[1] - m * p0[0]; // b = y - mx
     
@@ -49,16 +54,27 @@ function line (p0_, p1_) {
         var x = (y - b) / m;
         
         // cast a ray left and right to find all y = Math.round(mx + b)
-        for (var x0 = x; y === Math.round(m * x0 + b); x0--) {
-            at(x0, y, '-');
-        }
-        for (var x1 = x + 1; y === Math.round(m * x1 + b); x1++) {
-            at(x1, y, m > 0 ? '.' : '\'');
-        }
+        for (
+            var x0 = x;
+            y === Math.round(m * x0 + b)
+                && x0 >= bounds[0][0]
+                && x0 <= bounds[0][1]
+            ;
+            x0--
+        ) at(x0, y, '-');
+        
+        for (
+            var x1 = x + 1;
+            y === Math.round(m * x1 + b)
+                && x1 >= bounds[0][0]
+                && x1 <= bounds[0][1]
+            ;
+            x1++
+        ) at(x1, y, m > 0 ? '.' : '\'');
     }
     
     at(p0[0], p0[1], '0');
     at(p1[0], p1[1], '1');
 }
 
-line([ -1, -1 ], [ 1, 1 ]);
+line([ -0.5, 0 ], [ 1, 1 ]);
