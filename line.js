@@ -6,24 +6,33 @@ charm.on('^C', function () {
 });
 //charm.cursor(false);
 
+var at = (function () {
+    var queue = [];
+    return function (x, y, c) {
+        function write () {
+            charm.position(Math.floor(x), Math.floor(y));
+            charm.write(c);
+            
+            process.nextTick(function () {
+                if (queue.length) queue.shift()();
+            });
+        }
+        if (queue.length) queue.push(write)
+        else write()
+    };
+})();
+
 var coord = require('coord');
 var tr = coord([ [ -1, 1 ], [ -1, 1 ] ], [ [ 1, 80 ], [ 1, 24 ] ]);
 
-for (var i = 2; i < 79; i++) at(i, 0, '—');
+for (var i = 2; i < 80; i++) at(i, 0, '—');
 
 for (var i = 2; i < 24; i++) {
-    at(0, i, '|');
-    at(79, i, '|');
+    at(1, i, '|');
+    at(80, i, '|');
 }
 
-for (var i = 2; i < 79; i++) at(i, 24, '—');
-
-function at (x, y, c) {
-    process.nextTick(function () {
-        charm.position(Math.floor(x), Math.floor(y));
-        charm.write(c);
-    });
-}
+for (var i = 2; i < 80; i++) at(i, 24, '—');
 
 function line (p0_, p1_) {
     var t0 = tr(p0_);
@@ -52,4 +61,4 @@ function line (p0_, p1_) {
     at(p1[0], p1[1], '1');
 }
 
-line([ 0, 0 ], [ -1, -1 ]);
+line([ -1, -1 ], [ 1, 1 ]);
