@@ -61,7 +61,11 @@ function line (p0_, p1_) {
                 && x0 <= bounds[0][1]
             ;
             x0--
-        ) at(x0, y, '-');
+        ) at(x0, y,
+            Math.abs(m) >= 2 ? '|' :
+            m > 0 ? '_'
+            : '—'
+        );
         
         for (
             var x1 = x + 1;
@@ -70,11 +74,19 @@ function line (p0_, p1_) {
                 && x1 <= bounds[0][1]
             ;
             x1++
-        ) at(x1, y, m > 0 ? '.' : '\'');
+        ) at(x1, y,
+            Math.abs(m) >= 2 ? '|' :
+            m > 0 ? '_' :
+            '¯'
+        );
     }
     
     at(p0[0], p0[1], '0');
     at(p1[0], p1[1], '1');
 }
 
-line([ -0.5, 0 ], [ 1, 1 ]);
+for (var i = 0; i < 4; i++) {
+    var p0 = [ Math.random() * 2 - 1, Math.random() * 2 - 1 ];
+    var p1 = [ Math.random() * 2 - 1, Math.random() * 2 - 1 ];
+    line(p0, p1);
+}
