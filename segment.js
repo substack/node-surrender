@@ -12,7 +12,7 @@ function at (x, y, c) {
     charm.write(c);
 }
 
-plotLine([ 20, 10 ], [ 75, 10 ]);
+plotLine([ 20, 25 ], [ 75, 10 ]);
 
 function plotLine (p0_, p1_) {
     var p0, p1;
@@ -45,8 +45,8 @@ function plotLine (p0_, p1_) {
             m > 0 ? [ '\\', '_' ] :
             
             m < -1 ? [ '|', '/' ] :
-            m < -0.5 ? [ '/', '_' ] :
-            m < 0 ? [ '/', '_' ] :
+            m < -0.5 ? [ '/', '¯' ] :
+            m < 0 ? [ '/', '¯' ] :
             [ '_', '_' ]
         ;
         
