@@ -1,20 +1,26 @@
-var charm = require('charm')(process);
-charm.reset();
+var charmer = require('charm');
 
-charm.on('^C', function () {
-    charm.cursor(true);
-    process.exit(0)
-});
+module.exports = function () {
+    var charm = charmer.apply(null, arguments);
+    charm.reset();
+    
+    charm.on('^C', function () {
+        charm.cursor(true);
+    });
+    
+    return {
+        charm : charm,
+        line : plotLine.bind(null, charm);
+    };
+};
 
-function at (x, y, c) {
-    if (isNaN(x) || isNaN(y) || x < 1 || y < 1 || x > 80 || y > 80) return;
-    charm.position(Math.floor(x), Math.floor(y));
-    charm.write(c);
-}
-
-plotLine([ 20, 2 ], [ 21, 24 ]);
-
-function plotLine (p0_, p1_) {
+function plotLine (charm, p0_, p1_) {
+    function at (x, y, c) {
+        if (isNaN(x) || isNaN(y) || x < 1 || y < 1 || x > 80 || y > 80) return;
+        charm.position(Math.floor(x), Math.floor(y));
+        charm.write(c);
+    }
+    
     var p0, p1;
     if (p0_[1] < p1_[1]) {
         p0 = p0_, p1 = p1_;
