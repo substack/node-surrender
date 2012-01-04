@@ -7,12 +7,13 @@ charm.on('^C', function () {
 });
 
 function at (x, y, c) {
+    if (x < 1 || y < 1 || x > 80 || y > 80) return;
     charm.position(Math.floor(x), Math.floor(y));
     charm.write(c);
 }
 
-var m = 0.5;
-var b = -10;
+var m = -0.1;
+var b = 15;
 
 for (var y = 1; y < 24; y++) {
     // y = m * x + b
@@ -24,13 +25,21 @@ for (var y = 1; y < 24; y++) {
         m > 1 ? [ '|', '\\' ] :
         m > 0.5 ? [ '\\', '_' ] :
         m > 0 ? [ '\\', '_' ] :
-        m < 1 ? [ '|', '/' ] :
+        
+        m < -1 ? [ '|', '/' ] :
+        m < -0.5 ? [ '/', '_' ] :
         m < 0 ? [ '/', '_' ] :
         []
     ;
     
-    if (m > 1) {
+    if (Math.abs(m) > 1) {
         at(xn, y, xp === xn ? chars[0] : chars[1]);
+    }
+    else if (m < 0) {
+        at(xp, y, chars[0]);
+        for (var x = xn + 1; x < xp; x++) {
+            at(x, y, chars[1]);
+        }
     }
     else {
         at(xp, y, chars[0]);
