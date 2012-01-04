@@ -11,8 +11,8 @@ function at (x, y, c) {
     charm.write(c);
 }
 
-var m = 10.0;
-var b = -2;
+var m = 0.5;
+var b = -10;
 
 for (var y = 1; y < 24; y++) {
     // y = m * x + b
@@ -30,7 +30,7 @@ for (var y = 1; y < 24; y++) {
     ;
     
     if (m > 1) {
-        at(xn - 1, y, xp === xn ? chars[0] : chars[1]);
+        at(xn, y, xp === xn ? chars[0] : chars[1]);
     }
     else {
         at(xp, y, chars[0]);

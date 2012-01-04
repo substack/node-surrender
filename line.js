@@ -46,7 +46,7 @@ function line (p0_, p1_) {
         [ p0[1], p1[1] ]
     ];
     
-    if (Math.round(p0[0] - p1[0]) === 0) {
+    if (Math.abs(p0[0] - p1[0]) < 0.5) {
         // vertical
         var x = p0[0];
         
@@ -57,7 +57,7 @@ function line (p0_, p1_) {
         return;
     }
     
-    if (Math.round(p0[1] - p1[1]) === 0) {
+    if (Math.abs(p0[1] - p1[1]) < 0.5) {
         // horizontal
         var y = p0[1];
         
@@ -72,36 +72,37 @@ function line (p0_, p1_) {
     }
     
     var m = (p0[1] - p1[1]) / (p0[0] - p1[0]);
-    
     var b = p0[1] - m * p0[0]; // b = y - mx
     
     for (var y = Math.floor(p0[1]); y < p1[1]; y++) {
         // solve for an initial x in x = (y - b) / m
         var x = (y - b) / m;
         
-        // cast a ray left and right to find all y = Math.round(mx + b)
+        // cast a ray left and right to find all y = Math.floor(mx + b)
         for (
             var x0 = x;
-            y === Math.round(m * x0 + b)
+            y === Math.floor(m * x0 + b)
                 && x0 >= bounds[0][0]
                 && x0 <= bounds[0][1]
             ;
             x0--
         ) at(x0, y,
             Math.abs(m) >= 2 ? '|' :
-            m > 0 ? '_'
-            : '—'
+            m > 1 ? '\\' :
+            m > 0 ? '_' :
+            '—'
         );
         
         for (
             var x1 = x + 1;
-            y === Math.round(m * x1 + b)
+            y === Math.floor(m * x1 + b)
                 && x1 >= bounds[0][0]
                 && x1 <= bounds[0][1]
             ;
             x1++
         ) at(x1, y,
             Math.abs(m) >= 2 ? '|' :
+            m > 1 ? '\\' :
             m > 0 ? '_' :
             '¯'
         );
