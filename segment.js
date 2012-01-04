@@ -12,39 +12,43 @@ function at (x, y, c) {
     charm.write(c);
 }
 
-var m = -0.1;
-var b = 15;
+plotLine([ 2, 10 ], [ 75, 15 ]);
 
-for (var y = 1; y < 24; y++) {
-    // y = m * x + b
-    // x = (y - b) / m
-    var xp = Math.floor((y - 1 - b) / m);
-    var xn = Math.floor((y - b) / m);
+function plotLine (p0, p1) {
+    var m = (p1[1] - p0[1]) / (p1[0] - p0[0]);
+    var b = p0[1] - m * p0[0];
     
-    var chars =
-        m > 1 ? [ '|', '\\' ] :
-        m > 0.5 ? [ '\\', '_' ] :
-        m > 0 ? [ '\\', '_' ] :
+    for (var y = 1; y < 24; y++) {
+        // y = m * x + b
+        // x = (y - b) / m
+        var xp = Math.floor((y - 1 - b) / m);
+        var xn = Math.floor((y - b) / m);
         
-        m < -1 ? [ '|', '/' ] :
-        m < -0.5 ? [ '/', '_' ] :
-        m < 0 ? [ '/', '_' ] :
-        []
-    ;
-    
-    if (Math.abs(m) > 1) {
-        at(xn, y, xp === xn ? chars[0] : chars[1]);
-    }
-    else if (m < 0) {
-        at(xp, y, chars[0]);
-        for (var x = xn + 1; x < xp; x++) {
-            at(x, y, chars[1]);
+        var chars =
+            m > 1 ? [ '|', '\\' ] :
+            m > 0.5 ? [ '\\', '_' ] :
+            m > 0 ? [ '\\', '_' ] :
+            
+            m < -1 ? [ '|', '/' ] :
+            m < -0.5 ? [ '/', '_' ] :
+            m < 0 ? [ '/', '_' ] :
+            [ '_', '_' ]
+        ;
+        
+        if (Math.abs(m) > 1) {
+            at(xn, y, xp === xn ? chars[0] : chars[1]);
         }
-    }
-    else {
-        at(xp, y, chars[0]);
-        for (var x = xp + 1; x < xn; x++) {
-            at(x, y, chars[1]);
+        else if (m < 0) {
+            at(xp, y, chars[0]);
+            for (var x = xn + 1; x < xp; x++) {
+                at(x, y, chars[1]);
+            }
+        }
+        else {
+            at(xp, y, chars[0]);
+            for (var x = xp + 1; x < xn; x++) {
+                at(x, y, chars[1]);
+            }
         }
     }
 }
