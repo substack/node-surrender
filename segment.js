@@ -7,12 +7,12 @@ charm.on('^C', function () {
 });
 
 function at (x, y, c) {
-    if (x < 1 || y < 1 || x > 80 || y > 80) return;
+    if (isNaN(x) || isNaN(y) || x < 1 || y < 1 || x > 80 || y > 80) return;
     charm.position(Math.floor(x), Math.floor(y));
     charm.write(c);
 }
 
-plotLine([ 20, 25 ], [ 75, 10 ]);
+plotLine([ 20, 23 ], [ 75, 2 ]);
 
 function plotLine (p0_, p1_) {
     var p0, p1;
