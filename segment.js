@@ -12,7 +12,7 @@ function at (x, y, c) {
     charm.write(c);
 }
 
-plotLine([ 20, 23 ], [ 75, 2 ]);
+plotLine([ 20, 2 ], [ 21, 24 ]);
 
 function plotLine (p0_, p1_) {
     var p0, p1;
@@ -29,6 +29,17 @@ function plotLine (p0_, p1_) {
         var xp = Math.max(p0[0], p1[0]);
         for (var x = xn; x <= xp; x++) {
             at(x, p0[1], '—');
+        }
+        return;
+    }
+    
+    if (Math.floor(p0[0]) === Math.floor(p1[0])) {
+        // vertical
+        var yn = Math.min(p0[1], p1[1]);
+        var yp = Math.max(p0[1], p1[1]);
+        
+        for (var y = yn; y <= yp; y++) {
+            at(p0[0], y, '|');
         }
         return;
     }
