@@ -12,13 +12,21 @@ function at (x, y, c) {
     charm.write(c);
 }
 
-plotLine([ 2, 10 ], [ 75, 15 ]);
+plotLine([ 20, 10 ], [ 75, 15 ]);
 
-function plotLine (p0, p1) {
+function plotLine (p0_, p1_) {
+    var p0, p1;
+    if (p0_[1] < p1_[1]) {
+        p0 = p0_, p1 = p1_;
+    }
+    else {
+        p0 = p1_, p1 = p0_;
+    }
+    
     var m = (p1[1] - p0[1]) / (p1[0] - p0[0]);
     var b = p0[1] - m * p0[0];
     
-    for (var y = 1; y < 24; y++) {
+    for (var y = p0[1]; y < p1[1]; y++) {
         // y = m * x + b
         // x = (y - b) / m
         var xp = Math.floor((y - 1 - b) / m);
