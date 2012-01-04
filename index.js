@@ -1,22 +1,40 @@
 var charmer = require('charm');
+var coords = require('coords');
 
-module.exports = function () {
-    var charm = charmer.apply(null, arguments);
+module.exports = function (opts) {
+    if (!opts) opts = {};
+    
+    var charm = opts.charm || (function () {
+        var c = charmer(process);
+        c.cursor(false);
+        c.on('^C', function () {
+            c.cursor(true);
+            process.exit();
+        });
+        return c;
+    })();
+    
     charm.reset();
     
-    charm.on('^C', function () {
-        charm.cursor(true);
-    });
-    
-    return {
-        charm : charm,
-        line : plotLine.bind(null, charm);
-    };
+    var tr = opts.from ? coords(opts.from, [ [ 1, 80 ], [ 1, 24 ] ]) : null;
+    return new Render(charm, tr);
 };
 
-function plotLine (charm, p0_, p1_) {
+function Render (charm, tr) {
+    this.charm = charm;
+    this.transform = tr;
+}
+
+Render.prototype.line = function (p0_, p1_) {
+    var charm = this.charm;
+    if (this.transform) {
+        p0_ = this.transform(p0_);
+        p1_ = this.transform(p1_);
+    }
+    
     function at (x, y, c) {
         if (isNaN(x) || isNaN(y) || x < 1 || y < 1 || x > 80 || y > 80) return;
+        
         charm.position(Math.floor(x), Math.floor(y));
         charm.write(c);
     }
@@ -91,4 +109,6 @@ function plotLine (charm, p0_, p1_) {
             }
         }
     }
+    
+    return this;
 }
