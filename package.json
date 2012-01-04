@@ -1,0 +1,34 @@
+{
+    "name" : "surrender",
+    "version" : "0.0.0",
+    "description" : "draw lines and shapes on the terminal",
+    "main" : "index.js",
+    "directories" : {
+        "lib" : ".",
+        "example" : "example"
+    },
+    "scripts" : {
+        "test" : "tap test"
+    },
+    "repository" : {
+        "type" : "git",
+        "url" : "http://github.com/substack/node-surrender.git"
+    },
+    "dependencies" : {
+        "coords" : "0.0.x",
+        "charm" : "0.0.x"
+    },
+    "keywords" : [
+        "draw",
+        "terminal",
+        "line",
+        "shape"
+    ],
+    "author" : {
+        "name" : "James Halliday",
+        "email" : "mail@substack.net",
+        "url" : "http://substack.net"
+    },
+    "license" : "MIT/X11",
+    "engine" : { "node" : ">=0.4" }
+}
